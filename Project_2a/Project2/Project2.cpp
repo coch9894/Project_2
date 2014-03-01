@@ -3,9 +3,12 @@
 
 #include "stdafx.h"
 
+#include "Node.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	Node* test = new Node();
+
 	return 0;
 }
 
