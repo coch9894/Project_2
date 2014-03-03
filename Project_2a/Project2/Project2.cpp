@@ -31,6 +31,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	test->Full(0,NULL, 10);
 
+	int t = test->size_of(test);
+
 	cin >> temp;
 
 	return 0;

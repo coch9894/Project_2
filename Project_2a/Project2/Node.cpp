@@ -10,6 +10,26 @@ Node::~Node(void)
 {
 }
 
+int Node::size_of( Node * t )
+{
+	int count = 0;
+	int temp = 0;
+	while( count < CHILDREN )
+	{
+		if( t->child[count] != NULL )
+		{
+			temp += size_of( t->child[count] );
+		}
+		count++;
+	}
+	if( count == CHILDREN )
+	{
+		temp = 1;
+	}
+	size = temp;
+	return temp;
+}
+
 Add::Add(void)
 {
 }
@@ -20,6 +40,7 @@ void Add::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		count++;
 	}
 	delete this;
 }
@@ -39,6 +60,8 @@ void Add::Full( int depth, Node* p, double in )
 	if( depth == 0 )
 	{
 		parent = new Add();
+
+		size = MAX_DEPTH * 2 + 1;
 	}
 
 	if( depth < MAX_DEPTH )
@@ -68,9 +91,11 @@ void Add::Full( int depth, Node* p, double in )
 				break;
 			case con:
 				child[count] = new Con(rand()%100);
+				child[count]->parent = this;
 				break;
 			case input:
 				child[count] = new In(in);
+				child[count]->parent = this;
 				break;
 			}
 
@@ -88,9 +113,11 @@ void Add::Full( int depth, Node* p, double in )
 			{
 			case con:
 				child[i] = new Con(rand()%100);
+				child[i]->parent = this;
 				break;
 			case input:
 				child[i] = new In(in);
+				child[i]->parent = this;
 				break;
 			}
 			i++;
@@ -108,6 +135,7 @@ void Sub::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		count++;
 	}
 	delete this;
 }
@@ -127,6 +155,8 @@ void Sub::Full( int depth, Node* p, double in )
 	if( depth == 0 )
 	{
 		parent = new Sub();
+
+		size = MAX_DEPTH * 2 + 1;
 	}
 
 	if( depth < MAX_DEPTH )
@@ -156,9 +186,11 @@ void Sub::Full( int depth, Node* p, double in )
 				break;
 			case con:
 				child[count] = new Con(rand()%100);
+				child[count]->parent = this;
 				break;
 			case input:
 				child[count] = new In(in);
+				child[count]->parent = this;
 				break;
 			}
 
@@ -176,9 +208,11 @@ void Sub::Full( int depth, Node* p, double in )
 			{
 			case con:
 				child[i] = new Con(rand()%100);
+				child[i]->parent = this;
 				break;
 			case input:
 				child[i] = new In(in);
+				child[i]->parent = this;
 				break;
 			}
 			i++;
@@ -196,6 +230,7 @@ void Mul::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		count++;
 	}
 	delete this;
 }
@@ -215,6 +250,8 @@ void Mul::Full( int depth, Node* p, double in )
 	if( depth == 0 )
 	{
 		parent = new Mul();
+
+		size = MAX_DEPTH * 2 + 1;
 	}
 
 	if( depth < MAX_DEPTH )
@@ -244,9 +281,11 @@ void Mul::Full( int depth, Node* p, double in )
 				break;
 			case con:
 				child[count] = new Con(rand()%100);
+				child[count]->parent = this;
 				break;
 			case input:
 				child[count] = new In(in);
+				child[count]->parent = this;
 				break;
 			}
 
@@ -264,9 +303,11 @@ void Mul::Full( int depth, Node* p, double in )
 			{
 			case con:
 				child[i] = new Con(rand()%100);
+				child[i]->parent = this;
 				break;
 			case input:
 				child[i] = new In(in);
+				child[i]->parent = this;
 				break;
 			}
 			i++;
@@ -284,6 +325,7 @@ void Quo::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		count++;
 	}
 	delete this;
 }
@@ -303,6 +345,8 @@ void Quo::Full( int depth, Node* p, double in )
 	if( depth == 0 )
 	{
 		parent = new Quo();
+
+		size = MAX_DEPTH * 2 + 1;
 	}
 
 	if( depth < MAX_DEPTH )
@@ -332,9 +376,11 @@ void Quo::Full( int depth, Node* p, double in )
 				break;
 			case con:
 				child[count] = new Con(rand()%100);
+				child[count]->parent = this;
 				break;
 			case input:
 				child[count] = new In(in);
+				child[count]->parent = this;
 				break;
 			}
 
@@ -352,9 +398,11 @@ void Quo::Full( int depth, Node* p, double in )
 			{
 			case con:
 				child[i] = new Con(rand()%100);
+				child[i]->parent = this;
 				break;
 			case input:
 				child[i] = new In(in);
+				child[i]->parent = this;
 				break;
 			}
 			i++;
@@ -364,6 +412,7 @@ void Quo::Full( int depth, Node* p, double in )
 
 Con::Con(double x)
 {
+	size = 1;
 	val = x;
 }
 
@@ -373,6 +422,7 @@ void Con::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		count++;
 	}
 	delete this;
 }
@@ -384,44 +434,12 @@ double Con::eval(Node* x)
 
 void Con::Full( int depth, Node* p, double in )
 {
-	parent = p;
-
-	// if the head create yourself
-	if( depth == 0 )
-	{
-		exit(-1);
-	}
-
-	if( depth < MAX_DEPTH )
-	{
-		exit(-1);
-	}
-
-	else
-	{
-		/*
-		int type = (rand() % TERMS) + NON_TERMS;
-		int i = 0;
-		while( i < CHILDREN )
-		{
-			switch(type)
-			{
-			case con:
-				child[i] = new Con(rand()%100);
-				break;
-			case input:
-				child[i] = new In(rand()%100);
-				break;
-			}
-			i++;
-		}
-		*/
-		exit(-1);
-	}
+	exit( -1 );
 }
 
 In::In(double x)
 {
+	size = 1;
 	val = x;
 }
 
@@ -431,6 +449,7 @@ void In::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		count++;
 	}
 	delete this;
 }
@@ -442,40 +461,7 @@ double In::eval(Node* x)
 
 void In::Full( int depth, Node* p, double in )
 {
-	parent = p;
-
-	// if the head create yourself
-	if( depth == 0 )
-	{
-		exit(-1);
-	}
-
-	if( depth < MAX_DEPTH )
-	{
-		exit(-1);
-	}
-
-	else
-	{
-		/*
-		int type = (rand() % TERMS) + NON_TERMS;
-		int i = 0;
-		while( i < CHILDREN )
-		{
-			switch(type)
-			{
-			case con:
-				child[i] = new Con(rand()%100);
-				break;
-			case input:
-				child[i] = new In(rand()%100);
-				break;
-			}
-			i++;
-		}
-		*/
-		exit(-1);
-	}
+	exit( -1 );
 }
 
 
@@ -491,6 +477,7 @@ void IF::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		count++;
 	}
 	delete this;
 }
@@ -510,6 +497,7 @@ void IF::Full( int depth, Node* p, double in )
 	if( depth == 0 )
 	{
 		parent = new IF();
+		size = MAX_DEPTH * 2 + 1;
 	}
 
 	if( depth < MAX_DEPTH )
@@ -539,9 +527,11 @@ void IF::Full( int depth, Node* p, double in )
 				break;
 			case con:
 				child[count] = new Con(rand()%100);
+				child[count]->parent = this;
 				break;
 			case input:
 				child[count] = new In(in);
+				child[count]->parent = this;
 				break;
 			}
 
@@ -559,9 +549,11 @@ void IF::Full( int depth, Node* p, double in )
 			{
 			case con:
 				child[i] = new Con(rand()%100);
+				child[i]->parent = this;
 				break;
 			case input:
 				child[i] = new In(in);
+				child[i]->parent = this;
 				break;
 			}
 			i++;

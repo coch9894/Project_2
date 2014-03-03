@@ -25,10 +25,14 @@ public:
 	virtual ~Node(void);
 
 	double val;
+
+	int size;
 	
 	Node* parent;
 	
 	Node* child[CHILDREN];
+
+	int size_of( Node* );
 
 	virtual void erase(void) = 0;
 
