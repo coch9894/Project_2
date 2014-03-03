@@ -23,12 +23,18 @@ public:
 	Node(void);
 	
 	virtual ~Node(void);
+
+	double val;
 	
 	Node* parent;
 	
 	Node* child[CHILDREN];
 
-	void Full(int, Node*);
+	virtual void erase(void) = 0;
+
+	virtual void Full(int, Node*, double) = 0;
+
+	virtual double eval(Node*) = 0;
 };
 
 
@@ -38,7 +44,11 @@ public:
 	
 	Add(void);
 
-	double eval(double);
+	void erase(void);
+
+	double eval(Node*);
+
+	void Full(int, Node*, double);
 };
 
 class Sub : public Node
@@ -47,7 +57,11 @@ public:
 
 	Sub(void);
 
-	double eval(double);
+	void erase(void);
+
+	double eval(Node*);
+
+	void Full(int, Node*, double);
 };
 
 class Mul : public Node
@@ -56,7 +70,11 @@ public:
 
 	Mul(void);
 
-	double eval(double);
+	void erase(void);
+
+	double eval(Node*);
+
+	void Full(int, Node*, double);
 };
 
 class Quo : public Node
@@ -65,29 +83,37 @@ public:
 
 	Quo(void);
 
-	double eval(double);
+	void erase(void);
+
+	double eval(Node*);
+
+	void Full(int, Node*, double);
 };
 
 class Con : public Node
 {
 public:
 	
-	Con(void);
+	Con(double x);
 
-	double eval(double);
-		
-	double val;
+	void erase(void);
+
+	double eval(Node*);
+
+	void Full(int, Node*, double);
 };
 
 class In : public Node
 {
 public:
 	
-	In(void);
+	In(double x);
 
-	double eval(double);
-		
-	double val;
+	void erase(void);
+
+	double eval(Node*);
+
+	void Full(int, Node*, double);
 };
 
 class IF : public Node
@@ -96,7 +122,11 @@ public:
 	
 	IF(void);
 
-	double eval(double);
+	void erase(void);
+
+	double eval(Node*);
+
+	void Full(int, Node*, double);
 
 	bool test;
 };
