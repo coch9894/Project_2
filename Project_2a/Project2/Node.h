@@ -27,6 +27,12 @@ public:
 	double val;
 
 	int size;
+
+	int avg_size;
+
+	double fitness;
+
+	double avg_fitness;
 	
 	Node* parent;
 	
@@ -34,11 +40,13 @@ public:
 
 	int size_of( Node* );
 
+	double Fitness( Node*, double );
+
 	virtual void erase(void) = 0;
 
-	virtual void Full(int, Node*, double) = 0;
+	virtual void Full(int, Node*) = 0;
 
-	virtual double eval(Node*) = 0;
+	virtual double eval(Node*, double) = 0;
 };
 
 
@@ -50,9 +58,9 @@ public:
 
 	void erase(void);
 
-	double eval(Node*);
+	double eval(Node*, double);
 
-	void Full(int, Node*, double);
+	void Full(int, Node*);
 };
 
 class Sub : public Node
@@ -63,9 +71,9 @@ public:
 
 	void erase(void);
 
-	double eval(Node*);
+	double eval(Node*, double);
 
-	void Full(int, Node*, double);
+	void Full(int, Node*);
 };
 
 class Mul : public Node
@@ -76,9 +84,9 @@ public:
 
 	void erase(void);
 
-	double eval(Node*);
+	double eval(Node*, double);
 
-	void Full(int, Node*, double);
+	void Full(int, Node*);
 };
 
 class Quo : public Node
@@ -89,9 +97,9 @@ public:
 
 	void erase(void);
 
-	double eval(Node*);
+	double eval(Node*, double);
 
-	void Full(int, Node*, double);
+	void Full(int, Node*);
 };
 
 class Con : public Node
@@ -102,22 +110,22 @@ public:
 
 	void erase(void);
 
-	double eval(Node*);
+	double eval(Node*, double);
 
-	void Full(int, Node*, double);
+	void Full(int, Node*);
 };
 
 class In : public Node
 {
 public:
 	
-	In(double x);
+	In(void);
 
 	void erase(void);
 
-	double eval(Node*);
+	double eval(Node*, double);
 
-	void Full(int, Node*, double);
+	void Full(int, Node*);
 };
 
 class IF : public Node
@@ -128,9 +136,9 @@ public:
 
 	void erase(void);
 
-	double eval(Node*);
+	double eval(Node*, double);
 
-	void Full(int, Node*, double);
+	void Full(int, Node*);
 
 	bool test;
 };

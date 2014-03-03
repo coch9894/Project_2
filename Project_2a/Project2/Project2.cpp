@@ -7,34 +7,44 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	srand(time(NULL));
+
 	int type = rand() % NON_TERMS;
 
 	Node* test;
 
-	char temp;
+	char temp = 'r';
 
-	switch(type)
+	while( temp != 'q' )
 	{
-	case add:
-		test = new Add();
-		break;
-	case sub:
-		test = new Sub();
-		break;
-	case mul:
-		test = new Mul();
-		break;
-	case quo:
-		test = new Quo();
-		break;
+		switch(type)
+		{
+		case add:
+			test = new Add();
+			break;
+		case sub:
+			test = new Sub();
+			break;
+		case mul:
+			test = new Mul();
+			break;
+		case quo:
+			test = new Quo();
+			break;
+		}
+
+		test->Full( 0, NULL);
+	
+		//double t = test->Fitness(test);
+
+		double t = test->eval(test, 5);
+
+		//int t = test->size_of(test);
+
+		cout << t << endl;
+
+		cin >> temp;
 	}
-
-	test->Full(0,NULL, 10);
-
-	int t = test->size_of(test);
-
-	cin >> temp;
-
 	return 0;
 }
 
