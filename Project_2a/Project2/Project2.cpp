@@ -23,6 +23,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		inputs[i] = i+1;
 		outputs[i] = (i+1) * (i+1);
+		i++;
 	}
 
 	char temp = 'r';
