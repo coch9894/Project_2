@@ -5,6 +5,8 @@
 
 #include "Node.h"
 
+#define NUM_POINTS 5
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	srand(time(NULL));
@@ -12,6 +14,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	int type = rand() % NON_TERMS;
 
 	Node* test;
+
+	double inputs[NUM_POINTS];
+	double outputs[NUM_POINTS];
+
+	int i = 0;
+	while( i < NUM_POINTS )
+	{
+		inputs[i] = i+1;
+		outputs[i] = (i+1) * (i+1);
+	}
 
 	char temp = 'r';
 
@@ -34,14 +46,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 
 		test->Full( 0, NULL);
-	
-		//double t = test->Fitness(test);
 
-		double t = test->eval(test, 5);
-
-		//int t = test->size_of(test);
-
-		cout << t << endl;
+		cout << test->Fitness(test, inputs, outputs, NUM_POINTS) << endl;
 
 		cin >> temp;
 	}

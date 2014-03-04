@@ -40,7 +40,7 @@ public:
 
 	int size_of( Node* );
 
-	double Fitness( Node*, double );
+	double Fitness( Node*, double[], double[], int );
 
 	virtual void erase(void) = 0;
 

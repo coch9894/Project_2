@@ -30,9 +30,15 @@ int Node::size_of( Node * t )
 	return temp;
 }
 
-double Node::Fitness( Node * t, double expected )
+double Node::Fitness( Node * t, double input[], double output[], int length )
 {
-	return t->eval(t, 5);
+	fitness = 0;
+	for( int i = 0; i < length; i++ )
+	{
+		double z = t->eval(t,input[i]);
+		fitness += ( z - output[i] ) * ( z - output[i] );
+	}
+	return sqrt(fitness);
 }
 
 Add::Add(void)
