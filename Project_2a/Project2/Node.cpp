@@ -403,13 +403,8 @@ Con::Con(double x)
 
 void Con::erase()
 {
-	int count = 0;
-	while( count < CHILDREN )
-	{
-		child[count]->erase();
-		count++;
-	}
 	delete this;
+	return;
 }
 
 double Con::eval(Node* x, double in)
@@ -435,13 +430,8 @@ In::In()
 
 void In::erase()
 {
-	int count = 0;
-	while( count < CHILDREN )
-	{
-		child[count]->erase();
-		count++;
-	}
 	delete this;
+	return;
 }
 
 double In::eval(Node* x, double in)
