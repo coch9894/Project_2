@@ -30,6 +30,41 @@ int Node::size_of( Node * t )
 	return temp;
 }
 
+Node * Node::copy( Node * t )
+{
+	Node * temp;
+	switch(t->op_type)
+	{
+	case add:
+		temp = new Add();
+		break;
+	case sub:
+		temp = new Sub();
+		break;
+	case mul:
+		temp = new Mul();
+		break;
+	case quo:
+		temp = new Quo();
+		break;
+	case con:
+		temp = new Con(t->val);
+		break;
+	case input:
+		temp = new In();
+		break;
+	}
+
+	int count = 0;
+	while( count < CHILDREN )
+	{
+		temp->child[count] = temp->copy(t->child[count]);
+		count++;
+	}
+
+	return temp;
+}
+
 double Node::Fitness( Node * t, double input[], double output[], int length )
 {
 	fitness = 0;
@@ -41,8 +76,74 @@ double Node::Fitness( Node * t, double input[], double output[], int length )
 	return sqrt(fitness);
 }
 
+void Node::Full( int depth, Node* p)
+{
+	parent = p;
+
+	if( depth < MAX_DEPTH )
+	{
+		int count = 0;
+		while( count < CHILDREN )
+		{
+			int type = rand() % NON_TERMS;
+			
+			switch(type)
+			{
+			case add:
+				child[count] = new Add();
+				child[count]->Full(depth+1, child[count]);
+				break;
+			case sub:
+				child[count] = new Sub();
+				child[count]->Full(depth+1, child[count]);
+				break;
+			case mul:
+				child[count] = new Mul();
+				child[count]->Full(depth+1, child[count]);
+				break;
+			case quo:
+				child[count] = new Quo();
+				child[count]->Full(depth+1, child[count]);
+				break;
+			case con:
+				child[count] = new Con(rand()%10);
+				child[count]->parent = this;
+				break;
+			case input:
+				child[count] = new In();
+				child[count]->parent = this;
+				break;
+			}
+
+			count++;
+		}
+	}
+
+	else
+	{
+		int type = (rand() % TERMS) + NON_TERMS;
+		int i = 0;
+		while( i < CHILDREN )
+		{
+			switch(type)
+			{
+			case con:
+				child[i] = new Con(rand()%10);
+				child[i]->parent = this;
+				break;
+			case input:
+				child[i] = new In();
+				child[i]->parent = this;
+				break;
+			}
+			i++;
+		}
+	}
+}
+
 Add::Add(void)
 {
+	op_type = add;
 }
 
 void Add::erase()
@@ -61,75 +162,9 @@ double Add::eval(Node* x, double in)
 	return child[0]->eval(child[0], in) + child[1]->eval(child[1], in);
 }
 
-void Add::Full( int depth, Node* p)
-{
-	//cout << "Add " << endl;
-
-	parent = p;
-
-	if( depth < MAX_DEPTH )
-	{
-		int count = 0;
-		while( count < CHILDREN )
-		{
-			int type = rand() % NON_TERMS;
-			
-			switch(type)
-			{
-			case add:
-				child[count] = new Add();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case sub:
-				child[count] = new Sub();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case mul:
-				child[count] = new Mul();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case quo:
-				child[count] = new Quo();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case con:
-				child[count] = new Con(rand()%100);
-				child[count]->parent = this;
-				break;
-			case input:
-				child[count] = new In();
-				child[count]->parent = this;
-				break;
-			}
-
-			count++;
-		}
-	}
-
-	else
-	{
-		int type = (rand() % TERMS) + NON_TERMS;
-		int i = 0;
-		while( i < CHILDREN )
-		{
-			switch(type)
-			{
-			case con:
-				child[i] = new Con(rand()%100);
-				child[i]->parent = this;
-				break;
-			case input:
-				child[i] = new In();
-				child[i]->parent = this;
-				break;
-			}
-			i++;
-		}
-	}
-}
-
 Sub::Sub(void)
 {
+	op_type = sub;
 }
 
 void Sub::erase()
@@ -148,75 +183,9 @@ double Sub::eval(Node* x, double in)
 	return child[0]->eval(child[0], in) - child[1]->eval(child[1], in);
 }
 
-void Sub::Full( int depth, Node* p )
-{
-	//cout << "Sub " << endl;
-
-	parent = p;
-
-	if( depth < MAX_DEPTH )
-	{
-		int count = 0;
-		while( count < CHILDREN )
-		{
-			int type = rand() % NON_TERMS;
-			
-			switch(type)
-			{
-			case add:
-				child[count] = new Add();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case sub:
-				child[count] = new Sub();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case mul:
-				child[count] = new Mul();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case quo:
-				child[count] = new Quo();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case con:
-				child[count] = new Con(rand()%100);
-				child[count]->parent = this;
-				break;
-			case input:
-				child[count] = new In();
-				child[count]->parent = this;
-				break;
-			}
-
-			count++;
-		}
-	}
-
-	else
-	{
-		int type = (rand() % TERMS) + NON_TERMS;
-		int i = 0;
-		while( i < CHILDREN )
-		{
-			switch(type)
-			{
-			case con:
-				child[i] = new Con(rand()%100);
-				child[i]->parent = this;
-				break;
-			case input:
-				child[i] = new In();
-				child[i]->parent = this;
-				break;
-			}
-			i++;
-		}
-	}
-}
-
 Mul::Mul(void)
 {
+	op_type = mul;
 }
 
 void Mul::erase()
@@ -235,75 +204,9 @@ double Mul::eval(Node* x, double in )
 	return child[0]->eval(child[0], in) * child[1]->eval(child[1], in);
 }
 
-void Mul::Full( int depth, Node* p )
-{
-	//cout << "Mul " << endl;
-
-	parent = p;
-
-	if( depth < MAX_DEPTH )
-	{
-		int count = 0;
-		while( count < CHILDREN )
-		{
-			int type = rand() % NON_TERMS;
-			
-			switch(type)
-			{
-			case add:
-				child[count] = new Add();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case sub:
-				child[count] = new Sub();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case mul:
-				child[count] = new Mul();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case quo:
-				child[count] = new Quo();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case con:
-				child[count] = new Con(rand()%100);
-				child[count]->parent = this;
-				break;
-			case input:
-				child[count] = new In();
-				child[count]->parent = this;
-				break;
-			}
-
-			count++;
-		}
-	}
-
-	else
-	{
-		int type = (rand() % TERMS) + NON_TERMS;
-		int i = 0;
-		while( i < CHILDREN )
-		{
-			switch(type)
-			{
-			case con:
-				child[i] = new Con(rand()%100);
-				child[i]->parent = this;
-				break;
-			case input:
-				child[i] = new In();
-				child[i]->parent = this;
-				break;
-			}
-			i++;
-		}
-	}
-}
-
 Quo::Quo(void)
 {
+	op_type = quo;
 }
 
 void Quo::erase()
@@ -319,73 +222,14 @@ void Quo::erase()
 
 double Quo::eval(Node* x, double in)
 {
-	return child[0]->eval(child[0], in) / child[1]->eval(child[1], in);
-}
-
-void Quo::Full( int depth, Node* p)
-{
-	//cout << "Quo" << endl;
-
-	parent = p;
-
-	if( depth < MAX_DEPTH )
+	double temp = child[1]->eval(child[1], in);
+	if( temp != 0 )
 	{
-		int count = 0;
-		while( count < CHILDREN )
-		{
-			int type = rand() % NON_TERMS;
-			
-			switch(type)
-			{
-			case add:
-				child[count] = new Add();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case sub:
-				child[count] = new Sub();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case mul:
-				child[count] = new Mul();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case quo:
-				child[count] = new Quo();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case con:
-				child[count] = new Con(rand()%100);
-				child[count]->parent = this;
-				break;
-			case input:
-				child[count] = new In();
-				child[count]->parent = this;
-				break;
-			}
-
-			count++;
-		}
+		return child[0]->eval(child[0], in) / temp;
 	}
-
 	else
 	{
-		int type = (rand() % TERMS) + NON_TERMS;
-		int i = 0;
-		while( i < CHILDREN )
-		{
-			switch(type)
-			{
-			case con:
-				child[i] = new Con(rand()%100);
-				child[i]->parent = this;
-				break;
-			case input:
-				child[i] = new In();
-				child[i]->parent = this;
-				break;
-			}
-			i++;
-		}
+		return 99999999;
 	}
 }
 
@@ -397,6 +241,7 @@ Con::Con(double x)
 		child[count] = NULL;
 		count++;
 	}
+	op_type = con;
 	size = 1;
 	val = x;
 }
@@ -412,11 +257,6 @@ double Con::eval(Node* x, double in)
 	return val;
 }
 
-void Con::Full( int depth, Node* p )
-{
-	exit( -1 );
-}
-
 In::In()
 {
 	int count = 0;
@@ -425,6 +265,7 @@ In::In()
 		child[count] = NULL;
 		count++;
 	}
+	op_type = input;
 	size = 1;
 }
 
@@ -439,16 +280,11 @@ double In::eval(Node* x, double in)
 	return in;
 }
 
-void In::Full( int depth, Node* p )
-{
-	exit( -1 );
-}
-
-
 // IF case for later
 
 IF::IF(void)
 {
+	//op_type = iff;
 }
 
 void IF::erase()
@@ -465,69 +301,4 @@ void IF::erase()
 double IF::eval(Node* x, double in)
 {
 	return 0;
-}
-
-void IF::Full( int depth, Node* p )
-{
-	parent = p;
-
-	if( depth < MAX_DEPTH )
-	{
-		int count = 0;
-		while( count < CHILDREN )
-		{
-			int type = rand() % NON_TERMS;
-			
-			switch(type)
-			{
-			case add:
-				child[count] = new Add();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case sub:
-				child[count] = new Sub();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case mul:
-				child[count] = new Mul();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case quo:
-				child[count] = new Quo();
-				child[count]->Full(depth+1, child[count]);
-				break;
-			case con:
-				child[count] = new Con(rand()%100);
-				child[count]->parent = this;
-				break;
-			case input:
-				child[count] = new In();
-				child[count]->parent = this;
-				break;
-			}
-
-			count++;
-		}
-	}
-
-	else
-	{
-		int type = (rand() % TERMS) + NON_TERMS;
-		int i = 0;
-		while( i < CHILDREN )
-		{
-			switch(type)
-			{
-			case con:
-				child[i] = new Con(rand()%100);
-				child[i]->parent = this;
-				break;
-			case input:
-				child[i] = new In();
-				child[i]->parent = this;
-				break;
-			}
-			i++;
-		}
-	}
 }

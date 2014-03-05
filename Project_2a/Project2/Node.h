@@ -28,11 +28,9 @@ public:
 
 	int size;
 
-	int avg_size;
-
 	double fitness;
 
-	double avg_fitness;
+	op op_type;
 	
 	Node* parent;
 	
@@ -40,11 +38,13 @@ public:
 
 	int size_of( Node* );
 
+	Node * copy( Node* );
+
+	void Full(int, Node*);
+
 	double Fitness( Node*, double[], double[], int );
 
 	virtual void erase(void) = 0;
-
-	virtual void Full(int, Node*) = 0;
 
 	virtual double eval(Node*, double) = 0;
 };
@@ -59,8 +59,6 @@ public:
 	void erase(void);
 
 	double eval(Node*, double);
-
-	void Full(int, Node*);
 };
 
 class Sub : public Node
@@ -72,8 +70,6 @@ public:
 	void erase(void);
 
 	double eval(Node*, double);
-
-	void Full(int, Node*);
 };
 
 class Mul : public Node
@@ -85,8 +81,6 @@ public:
 	void erase(void);
 
 	double eval(Node*, double);
-
-	void Full(int, Node*);
 };
 
 class Quo : public Node
@@ -98,8 +92,6 @@ public:
 	void erase(void);
 
 	double eval(Node*, double);
-
-	void Full(int, Node*);
 };
 
 class Con : public Node
@@ -111,8 +103,6 @@ public:
 	void erase(void);
 
 	double eval(Node*, double);
-
-	void Full(int, Node*);
 };
 
 class In : public Node
@@ -124,8 +114,6 @@ public:
 	void erase(void);
 
 	double eval(Node*, double);
-
-	void Full(int, Node*);
 };
 
 class IF : public Node
@@ -137,8 +125,6 @@ public:
 	void erase(void);
 
 	double eval(Node*, double);
-
-	void Full(int, Node*);
 
 	bool test;
 };

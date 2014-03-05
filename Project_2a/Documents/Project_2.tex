@@ -84,7 +84,7 @@
 \section{Algorithm and Individual Description}
 
 %------------------------------------------------
-\paragraph{} For now there are only operations for building up a population of individuals, getting there fitness and removing/copying them. The easiest way to show how these methods work is to show the class diagram for there creation and then do pseudo code for the functions that need an explanation. This class diagram shows both how individuals, or nodes in my code, are formed and structured as well as the population of individuals. Helper functions under population to call functions for individuals are not shown in the diagram because at the time of its creation, the semantics of how I was going to handle them were not done yet.
+\paragraph{} For now there are only operations for building up a population of individuals, getting there fitness and removing/copying them. The easiest way to show how these methods work is to show the class diagram for there creation and then do pseudo code for the functions that need an explanation. This class diagram shows both how individuals, or nodes in my code, are formed and structured as well as the population of individuals. For now since all we need is to print out average size and average fitness as well as our best fitness, I have just created these functionalities in my population.
 
 \includegraphics[scale=.5]{ClassDiagram}
 
@@ -92,19 +92,13 @@
 
 \paragraph{Pseudo Code: Copy}
 \begin{verbatim}
-while ( Individual[]->fitness > 0.01 ) //larger then the smallest value measured
-    if( repeated fitness 100 times || 1000 generations have been created)
-        break
-    while( next Population is not filled )
-        create a new individual to put in the population
-        randomly select an individual from the current population N = 5 times
-        select the one with the best fitness and make the new individual it
-    crossover
-    mutate
-    calculate the new fitness / sort
+temp = new Node(); // based off of t's op type
+while all children have not be reached
+    temp->child = temp->copy( t->child );
+return temp;
 \end{verbatim}
 
-\paragraph{} DO NOT KNOW YET
+\paragraph{} This function is the only reason why I have to keep track of types in my solutions. Without this I would not have to worry about them at all. But nonetheless we have to create a new node and therefore we have to return a node at the end. therefore we cannot just have a straight copy, we have to return it from the function. This is one of the negatives to my solution.
 
 \paragraph{Pseudo Code: Evaluate}
 \begin{verbatim}
@@ -123,7 +117,6 @@ return in; // return the input value for evaluation
 // if non term
 while all children are deleted
     child->erase();
-    increment;
 delete this;
 return;
 // if const or input
@@ -145,15 +138,43 @@ size = temp; // local assignment so it is saved in the node/individual
 return temp; // this returns so we can calculate
 \end{verbatim}
 
-\paragraph{} The essence of this code is that it uses recursion to go down to the end nodes and build up the size from the bottom. To calculate an average size then we just need to touch each node and average out those size values which are then stored at the head node. If the node is a constant or input node, we can say it is of size one and start returning up our recursive calls that were made when we were non terminals.
+\paragraph{} The essence of this code is that it uses recursion to go down to the end nodes and build up the size from the bottom. If the node is a constant or input node, we can say it is of size one and start returning up our recursive calls that were made when we were non terminals.
 
 \paragraph{Pseudo Code: Full}
 \begin{verbatim}
 parent = node // this is the node passed in
 
 if depth is not greater then our max depth
-    while all children are filled
+    while all children are not filled
         generate a random individual // Add,Sub,...
+        call full( depth+1, this); // Fill the child
+else at max depth
+    while all children are not filled
+        generate a random individual // Constant or input
+\end{verbatim}
+
+\paragraph{} This can be used to fill an entire individual structure. If we are not yet at max depth we add nodes that are ops, otherwise we add values that are either constants or input values. This is a quick and effective way at generating the tree, especially when we need to generate multiple ones.
+
+\paragraph{} Now I will go into the functions that will be used by the population to compute fitness and size values. This list of functions will be expanded to include our future mutation and crossover functions. For now however we just have the ability to get at fitnesses and sizes, which automatically calculate the fitness and size values when trying to retrieve them. Another function prints out these values in a nice way.
+
+\paragraph{Pseudo Code: Population}
+\begin{verbatim}
+// for when a new population is created
+
+\end{verbatim}
+
+\paragraph{} 
+
+\paragraph{Pseudo Code: Get Size / Fitness}
+\begin{verbatim}
+
+\end{verbatim}
+
+\paragraph{} 
+
+\paragraph{Pseudo Code: Print}
+\begin{verbatim}
+
 \end{verbatim}
 
 \paragraph{} 
