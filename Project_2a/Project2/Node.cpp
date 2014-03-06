@@ -2,6 +2,7 @@
 #include "Node.h"
 
 
+
 Node::Node(void)
 {
 }
@@ -55,10 +56,17 @@ Node * Node::copy( Node * t )
 		break;
 	}
 
+	temp->fitness = t->fitness;
+	temp->op_type = t->op_type;
+	temp->parent = t->parent;
+	temp->size = t->size;
+	temp->val = t->val;
+
 	int count = 0;
 	while( count < CHILDREN )
 	{
-		temp->child[count] = temp->copy(t->child[count]);
+		if( t->child[count] != NULL )
+			temp->child[count] = temp->copy(t->child[count]);
 		count++;
 	}
 
@@ -74,6 +82,46 @@ double Node::Fitness( Node * t, double input[], double output[], int length )
 		fitness += ( z - output[i] ) * ( z - output[i] );
 	}
 	return sqrt(fitness);
+}
+
+Node * Node::get_node( int n )
+{
+	Node * temp;
+
+	bfs(this);
+
+	while( n != 0 )
+	{
+		que.pop();
+		n--;
+	}
+	temp = que.front();
+	while( !que.empty() )
+	{
+		que.pop();
+	}
+
+	return temp;
+}
+
+void Node::bfs( Node * t)
+{
+	int count = 0;
+	while( count < CHILDREN )
+	{
+		if(t->child[count] != NULL)
+			que.push(t->child[count]);
+		count++;
+	}
+	count = 0;
+	while( count < CHILDREN )
+	{
+		if( t->child[count] != NULL )
+		{
+			bfs(t->child[count]);
+		}
+		count++;
+	}
 }
 
 void Node::Full( int depth, Node* p)

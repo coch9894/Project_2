@@ -4,6 +4,8 @@
 
 #define POP_SIZE 1000
 #define NUM_POINTS 5
+#define ELITES 2
+#define N 5
 
 class Population
 {
@@ -12,6 +14,8 @@ public:
 	Population(void);
 
 	~Population(void);
+
+	void Evolve(int);
 
 	void print_avgs();
 
@@ -24,6 +28,8 @@ public:
 private:
 
 	Node * pop[POP_SIZE];
+
+	Node * gen[POP_SIZE];
 
 	int best_index;
 
@@ -40,5 +46,15 @@ private:
 	void calc_size();
 
 	void calc_fitness();
+
+	void print_avgs(int);
+
+	void Select();
+
+	void Crossover();
+
+	void Mutate();
+
+	void GenToPop();
 };
 

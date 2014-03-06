@@ -11,6 +11,7 @@
 #include <tchar.h>
 #include <iostream>
 #include <time.h>
+#include <queue>
 
 using namespace std;
 
