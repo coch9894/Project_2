@@ -93,12 +93,13 @@
 \paragraph{Pseudo Code: Copy}
 \begin{verbatim}
 temp = new Node(); // based off of t's op type
+temp->attr = t->attr; // save over details about t so we have an exact copy
 while all children have not be reached
     temp->child = temp->copy( t->child );
 return temp;
 \end{verbatim}
 
-\paragraph{} This function is the only reason why I have to keep track of types in my solutions. Without this I would not have to worry about them at all. But nonetheless we have to create a new node and therefore we have to return a node at the end. therefore we cannot just have a straight copy, we have to return it from the function. This is one of the negatives to my solution.
+\paragraph{} This function is the only reason why I have to keep track of types in my solutions. Without this I would not have to worry about them at all. But nonetheless we have to create a new node and therefore we have to return a node at the end. therefore we cannot just have a straight copy, we have to return it from the function. This is one of the negatives to my solution. What it actually does is create the new node based on the type of the source. It then copies over all the details from the source into the new one including type, value, and children.
 
 \paragraph{Pseudo Code: Evaluate}
 \begin{verbatim}
@@ -210,7 +211,7 @@ cout << "Best Fitness: " << best_fitness << endl;
 \paragraph{} This is simply for testing purposes and is nice to have as a procedure instead of having to do it continually by hand.
 
 %------------------------------------------------
-
+\pagebreak
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
 \section{Results}
 
