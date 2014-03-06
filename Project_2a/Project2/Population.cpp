@@ -72,6 +72,7 @@ void Population::calc_fitness()
 		if( temp < best_fitness )
 		{
 			best_fitness = temp;
+			best_index = k;
 		}
 		avg_fitness += temp;
 	}

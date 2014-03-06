@@ -25,6 +25,8 @@ private:
 
 	Node * pop[POP_SIZE];
 
+	int best_index;
+
 	double best_fitness;
 
 	double avg_fitness;

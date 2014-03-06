@@ -160,24 +160,54 @@ else at max depth
 \paragraph{Pseudo Code: Population}
 \begin{verbatim}
 // for when a new population is created
-
+while pop is not full
+    generate a new random node;
+    node->full();
+// set inputs and outputs
+while inputs not full
+    input[i] = i+1;
+    output[i] = (i+1) * (i+1);
+// get the avg_size and avg_fitness as well as best fitness of the pop
+calc_size;
+calc_fitness;
 \end{verbatim}
 
-\paragraph{} 
+\paragraph{} This generates the entire population with random individuals using the functions discussed earlier for creating a full tree. Then it sets up the input and output vectors used in creating fitness. Then it calculates the size of the trees as well as the fitness giving averages for both and a best fitness. The calculations are shown just below.
 
-\paragraph{Pseudo Code: Get Size / Fitness}
+\paragraph{Pseudo Code: Get / Calculate Size / Fitness}
 \begin{verbatim}
-
+calc_size / calc_fitness
+return avg_size / avg_fitness
+// calc_size
+avg_size = 0;
+for( k = 0; k < population_size; k++)
+    avg_size += pop[k]->size_of(pop[k]);
+avg_size / population_size;
+// calc_fitness
+avg_fitness = 0;
+for( k = 0; k < population_size; k++)
+    temp = pop[k]->size_of(pop[k]);
+    if( temp < best_fitness)
+        best_fitness = temp;
+        best_index = k;
+    avg_fitness += temp;
+avg_fitness / population_size;
 \end{verbatim}
 
-\paragraph{} 
+\paragraph{} So every time you try and access these values they are calculated that way we don't need to worry about wrong values being returned. This might be slower but it is more accurate and mistakes will be made less often this way. The calculation of size simply gets the size of each of the individuals and divides by the population size. For fitness however, it also stores the best fitness and its index, this will be important later for elitism.
 
 \paragraph{Pseudo Code: Print}
 \begin{verbatim}
+calc_size();
+calc_fitness();
 
+cout << "These are the average values:" << endl;
+cout << "Average Size: " << avg_size << endl;
+cout << "Average Fitness: " << avg_fitness << endl;
+cout << "Best Fitness: " << best_fitness << endl;
 \end{verbatim}
 
-\paragraph{} 
+\paragraph{} This is simply for testing purposes and is nice to have as a procedure instead of having to do it continually by hand.
 
 %------------------------------------------------
 
@@ -186,7 +216,9 @@ else at max depth
 
 %------------------------------------------------
 
+\paragraph{} The following results show that everything is working as well as it should right now. The average fitness is extremely high right now because when a divide by zero happens I return 9 million in hopes of making that fitness really large. This is not ideal and when we actually do some more work with this I will adjust my penalty accordingly. The average size is always the same because for now all the trees are identical full trees, the nodes themselves are the only differences. When we perform crossover or mutation hopefully we will start to get a varying size to the trees.
 
+\includegraphics{Results}
 
 %------------------------------------------------
 
@@ -194,13 +226,9 @@ else at max depth
 \section{Conclusion}
 
 %------------------------------------------------
-\paragraph{} The Genetic Algorithm seems to be working well in the since that it is taking good individuals and mutating them along with crossover to get a better next generation. The problem with this solution however is that a great individual is not present in the population at the start. Without this individual that is almost at the minimum at the start, it is very unlikely to actually find the global minimum.
 
-\paragraph{} Some improvements that could have been done were to add an individual to the population that was not random but was in fact very close to the actual minimums vector/fitness. This would guarantee that I had an individual that would be able to move to the minimum. This does take away from the whole purpose of the GA but as stated before, it guarantees a solution is found.
+\paragraph{} For now my set up is working as expected. I will try to start adding selection, crossover, and mutation to test it further but for now it seems to be functioning perfectly. Without the real tests to the system like crossover or mutation there really isn't much more to do for this project.
 
-\paragraph{} While it would be interesting to get these problems to all work correctly, the run time for them with 1000 individuals in the population takes quite some time. Each fix could take up to 5 minutes to run that fix to see if an improvement was made. Therefore I would like to rewrite the way I do sorting a bit but as just an exercise I have learned quite a bit about GA's and how they operate. The most interesting bit was the affect or the mutation ratio as well as the likely hood for crossover to occur. Changing these values had the greatest affect on the shape as the graph as well. The lower the mutation value was the more linear the graph looked which is why most of these graphs are linear. The values took a steep initial two or three steps and then hill climbed as a group to a minima.
-
-\paragraph{} Crossover had this same affect. The more likely two individuals were to crossover, the slower it took to hill climb. This is because good individuals are not always taken. Especially without elitism in the GA, it was difficult to assume that the best individual always stayed. Nonetheless it worked out to were the algorithms were working well together to at least find minima and with more tweaking of values and intervals it is plausible to think that the global minimum would eventually be found.
 %------------------------------------------------
 
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
