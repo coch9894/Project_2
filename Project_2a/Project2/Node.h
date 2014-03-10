@@ -42,10 +42,6 @@ public:
 
 	Node * get_node( int );
 
-	void bfs( Node * );
-
-	queue<Node*> que;
-
 	void Full(int, Node*);
 
 	double Fitness( Node*, double[], double[], int );

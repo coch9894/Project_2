@@ -73,6 +73,18 @@ Node * Node::copy( Node * t )
 	return temp;
 }
 
+Node * Node::get_node( int t )
+{
+	if( t == 0 )
+		return this;
+	if( child[0] != NULL )
+		child[0]->get_node(t-1);
+	else if( child[1] != NULL )
+		child[1]->get_node(t-1);
+	else
+		return NULL;
+}
+
 double Node::Fitness( Node * t, double input[], double output[], int length )
 {
 	fitness = 0;
@@ -82,46 +94,6 @@ double Node::Fitness( Node * t, double input[], double output[], int length )
 		fitness += ( z - output[i] ) * ( z - output[i] );
 	}
 	return sqrt(fitness);
-}
-
-Node * Node::get_node( int n )
-{
-	Node * temp;
-
-	bfs(this);
-
-	while( n != 0 )
-	{
-		que.pop();
-		n--;
-	}
-	temp = que.front();
-	while( !que.empty() )
-	{
-		que.pop();
-	}
-
-	return temp;
-}
-
-void Node::bfs( Node * t)
-{
-	int count = 0;
-	while( count < CHILDREN )
-	{
-		if(t->child[count] != NULL)
-			que.push(t->child[count]);
-		count++;
-	}
-	count = 0;
-	while( count < CHILDREN )
-	{
-		if( t->child[count] != NULL )
-		{
-			bfs(t->child[count]);
-		}
-		count++;
-	}
 }
 
 void Node::Full( int depth, Node* p)
