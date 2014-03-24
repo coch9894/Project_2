@@ -13,6 +13,8 @@ Node::~Node(void)
 
 int Node::size_of( Node * t )
 {
+	if( t == NULL )
+		return 0;
 	int count = 0;
 	int temp = 1;
 	while( count < CHILDREN )
@@ -48,6 +50,9 @@ Node * Node::copy( Node * t )
 	case quo:
 		temp = new Quo();
 		break;
+	case IF_:
+		temp = new IF();
+		break;
 	case con:
 		temp = new Con(t->val);
 		break;
@@ -75,14 +80,31 @@ Node * Node::copy( Node * t )
 
 Node * Node::get_node( int t )
 {
+	queue<Node*> Que;
+
 	if( t == 0 )
+	{
 		return this;
-	if( child[0] != NULL )
-		child[0]->get_node(t-1);
-	else if( child[1] != NULL )
-		child[1]->get_node(t-1);
+	}
 	else
-		return NULL;
+	{
+		Que.push(this);
+		Node * temp;
+		while( t != 0 )
+		{
+			temp = Que.front();
+			Que.pop();
+			Que.push(temp->child[0]);
+			Que.push(temp->child[1]);
+			t--;
+		}
+		while( !Que.empty() )
+		{
+			Que.pop();
+		}
+		return temp;
+	}
+	return 0;
 }
 
 double Node::Fitness( Node * t, double input[], double output[], int length )
@@ -123,6 +145,10 @@ void Node::Full( int depth, Node* p)
 				break;
 			case quo:
 				child[count] = new Quo();
+				child[count]->Full(depth+1, child[count]);
+				break;
+			case IF_:
+				child[count] = new IF();
 				child[count]->Full(depth+1, child[count]);
 				break;
 			case con:
@@ -304,13 +330,15 @@ double In::eval(Node* x, double in)
 
 IF::IF(void)
 {
-	//op_type = iff;
+	op_type = IF_;
+	test[0] = new In();
+	test[1] = new Con(rand()%10);
 }
 
 void IF::erase()
 {
 	int count = 0;
-	while( count < CHILDREN )
+	while( count < CHILDREN + 2 )
 	{
 		child[count]->erase();
 		count++;
@@ -320,5 +348,13 @@ void IF::erase()
 
 double IF::eval(Node* x, double in)
 {
-	return 0;
+	if( test[0]->eval(test[0],in) < test[1]->eval(test[1],in) )
+	{
+		return child[0]->eval(child[0],in);
+	}
+	else
+	{
+		return child[1]->eval(child[1],in);
+	}
+	//return 0;
 }

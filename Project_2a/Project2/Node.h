@@ -1,4 +1,5 @@
 #pragma once
+//#include <queue>
 
 typedef enum op
 {
@@ -6,13 +7,14 @@ typedef enum op
 	sub,
 	mul,
 	quo,
+	IF_,
 	con,
 	input
 }op;
 
 #define TERMS 2
-#define NON_TERMS 4
-#define OPS 6
+#define NON_TERMS 5
+#define OPS //
 #define MAX_DEPTH 5
 #define CHILDREN 2
 
@@ -128,5 +130,5 @@ public:
 
 	double eval(Node*, double);
 
-	bool test;
+	Node* test[2];
 };

@@ -25,6 +25,9 @@ Population::Population(void)
 		case quo:
 			pop[count] = new Quo();
 			break;
+		case IF_:
+			pop[count] = new IF();
+			break;
 		}
 
 		pop[count]->Full(0,NULL);
@@ -216,6 +219,7 @@ void Population::Crossover()
 		int rand2 = (int)rand() % gen[i+1]->size; // which node to trade
 
 		s1 = gen[i]->get_node(rand1); // what we swap
+		
 		s2 = gen[i+1]->get_node(rand2); // what we swap
 
 		p1 = s1->parent; // parent
@@ -230,37 +234,52 @@ void Population::Crossover()
 		s2 = NULL; // make the pointer null
 
 		int k = 0;
-		while( p1->child[k] != NULL )
+		if( p1 != NULL )
 		{
-			k++;
-		}
-		if( p1->child[k] == NULL )
-		{
-			p1->child[k] = node2;
-			node2->parent = p1;
+			while( p1->child[k] != NULL )
+			{
+				k++;
+			}
+			if( p1->child[k] == NULL )
+			{
+				p1->child[k] = node2;
+				node2->parent = p1;
+			}
+			else
+			{
+				cout << "DANGER, THERE BE GHOSTS!" << endl;
+				exit(-1);
+			}
 		}
 		else
 		{
-			cout << "DANGER, THERE BE GHOSTS!" << endl;
-			exit(-1);
+			gen[i] = node2;
+			node2->parent = NULL;
 		}
 
 		int j = 0;
-		while( p2->child[j] != NULL )
+		if( p2 != NULL )
 		{
-			j++;
-		}
-		if( p2->child[j] == NULL )
-		{
-			p2->child[j] = node1;
-			node1->parent = p2;
+			while( p2->child[j] != NULL )
+			{
+				j++;
+			}
+			if( p2->child[j] == NULL )
+			{
+				p2->child[j] = node1;
+				node1->parent = p2;
+			}
+			else
+			{
+				cout << "DANGER, THERE BE GHOSTS!" << endl;
+				exit(-1);
+			}
 		}
 		else
 		{
-			cout << "DANGER, THERE BE GHOSTS!" << endl;
-			exit(-1);
+			gen[i+1] = node1;
+			node1->parent = NULL;
 		}
-
 	}
 }
 
@@ -270,13 +289,18 @@ void Population::Mutate()
 
 void Population::GenToPop()
 {
+	pop[POP_SIZE-1] = pop[best_index];
+
 	int i = 0;
 	for( i = 0; i < POP_SIZE - ELITES; i++ )
 	{
 		pop[i] = gen[i];
 	}
-	pop[i+1] = pop[best_index];
-	pop[i+2] = pop[best_index];
+	while( i < POP_SIZE )
+	{
+		pop[i] = pop[POP_SIZE-1];
+		i++;
+	}
 
 	calc_size();
 	calc_fitness();
