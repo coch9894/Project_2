@@ -287,6 +287,71 @@ void Population::Crossover()
 
 void Population::Mutate()
 {
+	for( int i = 0; i < POP_SIZE - ELITES; i++ )
+	{
+		double prob = rand();
+		if( prob < .1 )
+		{
+			int value = rand() % gen[i]->size;
+			Node * swap = gen[i]->get_node(value);
+			Node * p = swap->parent;
+			Node * n;
+
+			int type = rand() % NON_TERMS;
+			
+			switch(type)
+			{
+			case add:
+				n = new Add();
+				break;
+			case sub:
+				n = new Sub();
+				break;
+			case mul:
+				n = new Mul();
+				break;
+			case quo:
+				n = new Quo();
+				break;
+			case IF_:
+				n = new IF();
+				break;
+			}
+
+			int count = 0;
+			while( count  < CHILDREN )
+			{
+				n->child[count] = swap->copy(swap->child[count]);
+			}
+			swap->erase();
+			swap = NULL;
+
+			int k = 0;
+			if( p != NULL )
+			{
+				while( p->child[k] != NULL )
+				{
+					k++;
+				}
+				if( p->child[k] == NULL )
+				{
+					p->child[k] = n;
+					n->parent = p;
+				}
+				else
+				{
+					cout << "DANGER, THERE BE GHOSTS!" << endl;
+					cin >> k;
+					exit(-1);
+				}
+			}
+			else
+			{
+				gen[i] = n;
+				n->parent = NULL;
+			}
+		}
+	}
 }
 
 void Population::GenToPop()

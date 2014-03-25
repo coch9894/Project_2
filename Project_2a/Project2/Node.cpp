@@ -57,6 +57,9 @@ Node * Node::copy( Node * t )
 	case input:
 		temp = new In();
 		break;
+	default:
+		temp = new Add();
+		break;
 	}
 
 	temp->fitness = t->fitness;
@@ -202,9 +205,9 @@ void Add::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		delete child[count];
 		count++;
 	}
-	delete this;
 }
 
 double Add::eval(Node* x, double in)
@@ -223,9 +226,9 @@ void Sub::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		delete child[count];
 		count++;
 	}
-	delete this;
 }
 
 double Sub::eval(Node* x, double in)
@@ -244,9 +247,9 @@ void Mul::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		delete child[count];
 		count++;
 	}
-	delete this;
 }
 
 double Mul::eval(Node* x, double in )
@@ -265,9 +268,9 @@ void Quo::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		delete child[count];
 		count++;
 	}
-	delete this;
 }
 
 double Quo::eval(Node* x, double in)
@@ -298,8 +301,6 @@ Con::Con(double x)
 
 void Con::erase()
 {
-	delete this;
-	return;
 }
 
 double Con::eval(Node* x, double in)
@@ -321,8 +322,6 @@ In::In()
 
 void In::erase()
 {
-	delete this;
-	return;
 }
 
 double In::eval(Node* x, double in)
@@ -341,9 +340,9 @@ void IF::erase()
 	while( count < CHILDREN )
 	{
 		child[count]->erase();
+		delete child[count];
 		count++;
 	}
-	delete this;
 }
 
 double IF::eval(Node* x, double in)

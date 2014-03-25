@@ -2,7 +2,7 @@
 
 #include "Node.h"
 
-#define POP_SIZE 1000
+#define POP_SIZE 100
 #define NUM_POINTS 5
 #define ELITES 2
 #define N 5

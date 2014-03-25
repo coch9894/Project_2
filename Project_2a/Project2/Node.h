@@ -14,7 +14,6 @@ typedef enum op
 
 #define TERMS 2
 #define NON_TERMS 5
-#define OPS //
 #define MAX_DEPTH 5
 #define CHILDREN 2
 
