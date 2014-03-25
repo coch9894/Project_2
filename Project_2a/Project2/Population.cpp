@@ -248,6 +248,7 @@ void Population::Crossover()
 			else
 			{
 				cout << "DANGER, THERE BE GHOSTS!" << endl;
+				cin >> k;
 				exit(-1);
 			}
 		}
@@ -272,6 +273,7 @@ void Population::Crossover()
 			else
 			{
 				cout << "DANGER, THERE BE GHOSTS!" << endl;
+				cin  >> j;
 				exit(-1);
 			}
 		}
@@ -289,19 +291,20 @@ void Population::Mutate()
 
 void Population::GenToPop()
 {
-	pop[POP_SIZE-1] = pop[best_index];
+	pop[POP_SIZE-1] = pop[best_index]->copy(pop[best_index]);
 
 	int i = 0;
 	for( i = 0; i < POP_SIZE - ELITES; i++ )
 	{
-		pop[i] = gen[i];
+		pop[i] = gen[i]->copy(gen[i]);
 	}
 	while( i < POP_SIZE )
 	{
-		pop[i] = pop[POP_SIZE-1];
+		pop[i] = pop[POP_SIZE-1]->copy(pop[POP_SIZE-1]);
 		i++;
 	}
 
 	calc_size();
 	calc_fitness();
+	//print_avgs();
 }

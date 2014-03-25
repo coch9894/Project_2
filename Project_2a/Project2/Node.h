@@ -129,6 +129,4 @@ public:
 	void erase(void);
 
 	double eval(Node*, double);
-
-	Node* test[2];
 };

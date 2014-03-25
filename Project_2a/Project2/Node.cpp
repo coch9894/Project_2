@@ -13,8 +13,6 @@ Node::~Node(void)
 
 int Node::size_of( Node * t )
 {
-	if( t == NULL )
-		return 0;
 	int count = 0;
 	int temp = 1;
 	while( count < CHILDREN )
@@ -94,8 +92,14 @@ Node * Node::get_node( int t )
 		{
 			temp = Que.front();
 			Que.pop();
-			Que.push(temp->child[0]);
-			Que.push(temp->child[1]);
+			if( temp->child[0] != NULL )
+			{
+				Que.push(temp->child[0]);
+			}
+			if( temp->child[1] != NULL )
+			{
+				Que.push(temp->child[1]);
+			}
 			t--;
 		}
 		while( !Que.empty() )
@@ -326,19 +330,15 @@ double In::eval(Node* x, double in)
 	return in;
 }
 
-// IF case for later
-
 IF::IF(void)
 {
 	op_type = IF_;
-	test[0] = new In();
-	test[1] = new Con(rand()%10);
 }
 
 void IF::erase()
 {
 	int count = 0;
-	while( count < CHILDREN + 2 )
+	while( count < CHILDREN )
 	{
 		child[count]->erase();
 		count++;
@@ -348,7 +348,7 @@ void IF::erase()
 
 double IF::eval(Node* x, double in)
 {
-	if( test[0]->eval(test[0],in) < test[1]->eval(test[1],in) )
+	if( in < rand() % 10 )
 	{
 		return child[0]->eval(child[0],in);
 	}
