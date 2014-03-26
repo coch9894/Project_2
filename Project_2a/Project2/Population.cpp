@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "Population.h"
 
-
 Population::Population(void)
 {
 	// Set the population up with random individuals
@@ -37,10 +36,19 @@ Population::Population(void)
 
 	// Set up inputs and outputs as k -> k^2
 
+	
+	double x[NUM_POINTS] = { 52, 30.2, 23.2, 12, 0.6, -8, -20.8, -21.8, -27, -33.4, -41, -53.8,
+	-52.8, -61, -55.4, -56, -63.8, -65.8, -60, -55.4, -57, -57.8, -49.8, -42, -42.4, -29,
+	-28.8, -13.8, -13, -1.4, 15, -7.5, -5, 1.5, 1, 0.5, -7, 2.5, -1, 2.5, 1, -0.5, 5, 3.5,
+	-1, 1.5, 7, -0.5, 2, -0.5, 10.20537863, 12.47229837, 12.60292251, 14.07559994, 12.28493299,
+	19.68999988, 20.94679123, 19.99243556, 21.06059243, 22.6242444, 18.27989445, 14.6015212, 12.00004897,
+	22.62273913, 20.31713541, 24.66839051, 28.10083518, 31.01892213, 27.95303678, 28.67447528, 35.2514392,
+	31.03233741, 29.56048342, 34.44107329, 31.19301254, 35.12186997, 36.24506377, 31.28759691, 34.74938605, 44.02769935, 43.56472625 };
+
 	for( int k = 0; k < NUM_POINTS; k++ )
 	{
-		input[k] = (k+1);
-		output[k] = (k+1) * (k+1);
+		input[k] = -40 + k;
+		output[k] = x[k];
 	}
 
 	// Set avg_size
@@ -133,17 +141,50 @@ void Population::print_avgs(int generation)
 	cout << "These are the average values for generation:" << generation << endl;
 	cout << "Average Size: " << avg_size << endl;
 	cout << "Average Fitness: " << avg_fitness << endl;
-	cout << "Best Fitness: " << best_fitness << endl;
+	cout << "Best Fitness: " << best_fitness << endl << endl;
 }
 
 void Population::Evolve(int generations)
 {
-	int generation = 1;
+	int generation = 0;
+	
+	// filename
+	ofstream o;
+	o.open("numbers.txt");
+	ofstream file;
+	char sdate[9];
+	char stime[9];
+	_strdate_s(sdate);
+	_strtime_s(stime);
+	string filename = "results";
+	filename.append(stime);
+	filename.append("_");
+	filename.append(sdate);
+	filename.append(".txt");
+	for(int i = 0; i < filename.length(); ++i)
+	{
+		if( filename[i] == '/' || filename[i] == ':')
+		{
+			filename[i] = '-';
+		}
+	}
+	file.open(filename);
+
 	while( generation <= generations )
 	{
 		if( generation % (generations / 10) == 0 )
 		{
 			print_avgs(generation);
+		}
+
+		if( FILE_PRINT )
+		{
+			file << avg_fitness << " " << best_fitness << endl;
+			for( int i = 0; i < NUM_POINTS; i++ )
+			{
+				o << output[i] << " " << pop[best_index]->eval(pop[best_index],input[i]) << endl;
+			}
+			o.close();
 		}
 
 		calc_fitness();
@@ -188,15 +229,28 @@ void Population::Select()
 					break;
 				}
 
-				gen[i] = pop[random]->copy(pop[random]);
-
+				if( pop[random]->size < SIZE )
+				{
+					gen[i] = pop[random]->copy(pop[random]);
+				}
+				else
+				{
+					j--;
+				}
 			}
 			else
 			{
 
 				if( pop[random]->fitness < gen[i]->fitness )
 				{
-					gen[i] = pop[random]->copy(pop[random]);
+					if( pop[random]->size < SIZE )
+					{
+						gen[i] = pop[random]->copy(pop[random]);
+					}
+					else
+					{
+						j--;
+					}
 				}
 
 			}

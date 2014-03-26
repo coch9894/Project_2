@@ -2,10 +2,12 @@
 
 #include "Node.h"
 
-#define POP_SIZE 100
-#define NUM_POINTS 5
+#define POP_SIZE 500
+#define NUM_POINTS 81
 #define ELITES 2
 #define N 5
+#define SIZE 150
+#define FILE_PRINT true
 
 class Population
 {
